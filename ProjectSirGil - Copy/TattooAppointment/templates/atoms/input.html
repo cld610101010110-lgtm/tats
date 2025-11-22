@@ -1,0 +1,22 @@
+{# Atom: Input Field #}
+{# Usage: {% include 'atoms/input.html' with name='email' type='email' placeholder='Email' %} #}
+
+<input type="{{ type|default:'text' }}"
+       name="{{ name }}"
+       id="{{ id|default:name }}"
+       class="input {{ class }}"
+       {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+       {% if value %}value="{{ value }}"{% endif %}
+       {% if required %}required{% endif %}
+       {% if disabled %}disabled{% endif %}
+       {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+       {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+/>
+
+{#
+Available types: text, email, password, number, tel, date, datetime-local, time
+
+Example Usage:
+{% include 'atoms/input.html' with name='username' placeholder='Username' required=True %}
+{% include 'atoms/input.html' with name='phone' type='tel' placeholder='Phone Number' %}
+#}

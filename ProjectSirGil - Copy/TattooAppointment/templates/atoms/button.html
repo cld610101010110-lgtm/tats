@@ -1,0 +1,33 @@
+{# Atom: Button Component #}
+{# Usage: {% include 'atoms/button.html' with text='Click Me' type='primary' url='#' %} #}
+
+{% if url %}
+    <a href="{{ url }}"
+       class="btn btn--{{ type|default:'primary' }} {{ class }}"
+       {% if id %}id="{{ id }}"{% endif %}>
+        {% if icon %}<span class="{{ icon }}"></span>{% endif %}
+        {{ text|default:'Button' }}
+    </a>
+{% else %}
+    <button type="{{ button_type|default:'button' }}"
+            class="btn btn--{{ type|default:'primary' }} {{ class }}"
+            {% if disabled %}disabled{% endif %}
+            {% if id %}id="{{ id }}"{% endif %}>
+        {% if icon %}<span class="{{ icon }}"></span>{% endif %}
+        {{ text|default:'Button' }}
+    </button>
+{% endif %}
+
+{#
+Available types:
+- primary: Main action button
+- secondary: Secondary action
+- danger: Delete/destructive action
+- success: Confirm/success action
+- outline: Outlined button style
+
+Example Usage:
+{% include 'atoms/button.html' with text='Submit' type='primary' %}
+{% include 'atoms/button.html' with text='Cancel' type='secondary' url='/cancel/' %}
+{% include 'atoms/button.html' with text='Delete' type='danger' icon='🗑️' %}
+#}

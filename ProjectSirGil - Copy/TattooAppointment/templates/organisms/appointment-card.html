@@ -1,0 +1,60 @@
+{# Organism: Appointment Card #}
+{# Usage: {% include 'organisms/appointment-card.html' with appointment=appointment show_actions=True %} #}
+
+<div class="appointment-card appointment-card--{{ appointment.status }} {{ class }}">
+    {# Status Badge #}
+    <div class="appointment-card__status">
+        {% if appointment.status == 'approved' %}
+            {% include 'atoms/badge.html' with text='Approved' type='success' icon='✅' %}
+        {% elif appointment.status == 'rejected' %}
+            {% include 'atoms/badge.html' with text='Rejected' type='danger' icon='❌' %}
+        {% else %}
+            {% include 'atoms/badge.html' with text='Pending Review' type='warning' icon='⏳' %}
+        {% endif %}
+    </div>
+
+    {# Card Header #}
+    <div class="appointment-card__header">
+        <h3 class="appointment-card__client-name">{{ appointment.client_name }}</h3>
+    </div>
+
+    {# Card Body #}
+    <div class="appointment-card__body">
+        {% include 'molecules/info-row.html' with icon='📧' label='Email' value=appointment.email %}
+        {% include 'molecules/info-row.html' with icon='📱' label='Phone' value=appointment.phone %}
+        {% include 'molecules/info-row.html' with icon='📅' label='Appointment' value=appointment.appointment_date|date:"M d, Y - g:i A" class='appointment-card__date' %}
+
+        {# Tattoo Design #}
+        <div class="appointment-card__design">
+            <div class="appointment-card__design-icon">🎨</div>
+            <div class="appointment-card__design-text">{{ appointment.tattoo_design }}</div>
+        </div>
+
+        {# Reference Image #}
+        {% if appointment.reference_image %}
+            <div class="appointment-card__image-wrapper">
+                <img src="{{ appointment.reference_image.url }}"
+                     alt="Reference design"
+                     class="appointment-card__image">
+            </div>
+        {% endif %}
+    </div>
+
+    {# Card Actions (if staff) #}
+    {% if show_actions and user.is_staff %}
+        <div class="appointment-card__actions">
+            {% include 'atoms/button.html' with text='Edit' type='primary' url=edit_url icon='✏️' class='btn--small' %}
+            {% include 'atoms/button.html' with text='Delete' type='danger' url=delete_url icon='🗑️' class='btn--small' %}
+        </div>
+    {% endif %}
+</div>
+
+{#
+Example Usage:
+{% include 'organisms/appointment-card.html' with
+    appointment=appointment
+    show_actions=True
+    edit_url=edit_url
+    delete_url=delete_url
+%}
+#}

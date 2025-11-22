@@ -1,0 +1,18 @@
+{# Molecule: Stat Card Component #}
+{# Displays a statistic with icon and label #}
+{# Usage: {% include 'molecules/stat-card.html' with icon='📅' label='Total' value=stats.total %} #}
+
+<div class="stat-card {{ class }}">
+    <div class="stat-card__icon">{{ icon|default:'📊' }}</div>
+    <div class="stat-card__content">
+        <div class="stat-card__value">{{ value|default:0 }}</div>
+        <div class="stat-card__label">{{ label }}</div>
+    </div>
+</div>
+
+{#
+Example Usage:
+{% include 'molecules/stat-card.html' with icon='📅' label='Total Appointments' value=stats.total %}
+{% include 'molecules/stat-card.html' with icon='⏳' label='Pending' value=stats.pending %}
+{% include 'molecules/stat-card.html' with icon='✅' label='Approved' value=stats.approved %}
+#}

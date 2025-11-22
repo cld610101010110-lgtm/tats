@@ -1,0 +1,81 @@
+{# Organism: Appointment Form #}
+{# Usage: {% include 'organisms/appointment-form.html' with form=form %} #}
+
+<form method="POST" enctype="multipart/form-data" class="appointment-form {{ class }}">
+    {% csrf_token %}
+
+    {# Client Information #}
+    <div class="form-section">
+        <h3 class="form-section__title">Client Information</h3>
+
+        {% include 'molecules/form-field.html' with
+            label='Full Name'
+            name='client_name'
+            placeholder='Your full name'
+            value=form.client_name.value
+            required=True
+        %}
+
+        {% include 'molecules/form-field.html' with
+            label='Email Address'
+            name='email'
+            type='email'
+            placeholder='your@email.com'
+            value=form.email.value
+            required=True
+        %}
+
+        {% include 'molecules/form-field.html' with
+            label='Phone Number'
+            name='phone'
+            type='tel'
+            placeholder='+1 (234) 567-8900'
+            value=form.phone.value
+            required=True
+        %}
+    </div>
+
+    {# Appointment Details #}
+    <div class="form-section">
+        <h3 class="form-section__title">Appointment Details</h3>
+
+        {% include 'molecules/form-field.html' with
+            label='Appointment Date & Time'
+            name='appointment_date'
+            type='datetime-local'
+            value=form.appointment_date.value
+            required=True
+        %}
+
+        {% include 'molecules/form-field.html' with
+            label='Tattoo Design Description'
+            name='tattoo_design'
+            field_type='textarea'
+            placeholder='Describe your tattoo idea, placement, size, style preferences...'
+            value=form.tattoo_design.value
+            rows=5
+            required=True
+        %}
+
+        <div class="form-field">
+            {% include 'atoms/label.html' with text='Reference Image' for='reference_image' %}
+            <input type="file"
+                   name="reference_image"
+                   id="reference_image"
+                   accept="image/*"
+                   class="input input--file">
+            <small class="form-field__help">Optional: Upload a reference image for your tattoo design</small>
+        </div>
+    </div>
+
+    {# Form Actions #}
+    <div class="form-actions">
+        {% include 'atoms/button.html' with text='Submit Appointment' type='primary' button_type='submit' class='btn--large' %}
+        {% include 'atoms/button.html' with text='Cancel' type='secondary' url=cancel_url|default:'/' class='btn--large' %}
+    </div>
+</form>
+
+{#
+Example Usage:
+{% include 'organisms/appointment-form.html' with form=form cancel_url='/appointments/' %}
+#}
