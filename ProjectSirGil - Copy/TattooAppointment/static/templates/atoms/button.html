@@ -1,0 +1,26 @@
+<!-- Atom: Button Component -->
+<!-- Usage: {% include 'atoms/button.html' with text='Click Me' type='primary' %} -->
+
+<button class="btn btn--{{ type|default:'primary' }}"
+        type="{{ button_type|default:'button' }}"
+        {% if disabled %}disabled{% endif %}
+        {% if id %}id="{{ id }}"{% endif %}>
+    {% if icon %}
+        <i class="icon icon--{{ icon }}"></i>
+    {% endif %}
+    {{ text|default:'Button' }}
+</button>
+
+<!--
+Available types:
+- primary
+- secondary
+- danger
+- success
+- outline
+
+Example Usage:
+{% include 'atoms/button.html' with text='Submit' type='primary' %}
+{% include 'atoms/button.html' with text='Cancel' type='secondary' %}
+{% include 'atoms/button.html' with text='Delete' type='danger' icon='trash' %}
+-->

@@ -1,0 +1,70 @@
+<!-- Organism: Navigation Bar Component -->
+<!-- Complex component combining multiple molecules and atoms -->
+<!-- Usage: {% include 'organisms/navbar.html' %} -->
+
+<nav class="navbar">
+    <div class="navbar__container">
+        <!-- Logo/Brand -->
+        <a href="/" class="navbar__brand">
+            <img src="{% static 'images/logo.png' %}" alt="Tattoo Studio" class="navbar__logo">
+            <span class="navbar__title">Tattoo Studio</span>
+        </a>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="navbar__toggle" aria-label="Toggle menu" aria-expanded="false">
+            <span class="navbar__toggle-icon"></span>
+        </button>
+
+        <!-- Navigation Links -->
+        <div class="navbar__menu">
+            <ul class="navbar__list">
+                <li class="navbar__item">
+                    <a href="{% url 'appointments:landing' %}" class="navbar__link {% if request.path == '/' %}navbar__link--active{% endif %}">
+                        Home
+                    </a>
+                </li>
+                <li class="navbar__item">
+                    <a href="{% url 'appointments:index' %}" class="navbar__link {% if 'appointments' in request.path %}navbar__link--active{% endif %}">
+                        Appointments
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                        <li class="navbar__item">
+                            <a href="{% url 'appointments:manage' %}" class="navbar__link">
+                                Manage
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="navbar__item navbar__item--dropdown">
+                        <button class="navbar__link navbar__dropdown-toggle">
+                            {{ user.username }}
+                        </button>
+                        <ul class="navbar__dropdown">
+                            <li><a href="#" class="navbar__dropdown-link">Profile</a></li>
+                            <li><a href="{% url 'appointments:logout' %}" class="navbar__dropdown-link">Logout</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="navbar__item">
+                        <a href="{% url 'appointments:login' %}" class="navbar__link">
+                            Login
+                        </a>
+                    </li>
+                    <li class="navbar__item">
+                        {% include 'atoms/button.html' with text='Sign Up' type='primary' %}
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!--
+Features:
+- Responsive design with mobile toggle
+- Active state highlighting
+- User authentication states
+- Dropdown menu for user actions
+- Reusable across all pages
+-->

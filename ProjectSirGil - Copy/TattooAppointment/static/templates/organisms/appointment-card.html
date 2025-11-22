@@ -1,0 +1,68 @@
+<!-- Organism: Appointment Card Component -->
+<!-- Displays appointment details in a card format -->
+<!-- Usage: {% include 'organisms/appointment-card.html' with appointment=appointment %} -->
+
+<article class="appointment-card">
+    <div class="appointment-card__header">
+        <h3 class="appointment-card__title">{{ appointment.client_name }}</h3>
+        <span class="appointment-card__status appointment-card__status--{{ appointment.status }}">
+            {{ appointment.get_status_display }}
+        </span>
+    </div>
+
+    <div class="appointment-card__body">
+        <div class="appointment-card__info">
+            <div class="appointment-card__info-item">
+                <i class="icon icon--calendar"></i>
+                <span>{{ appointment.appointment_date|date:"F d, Y" }}</span>
+            </div>
+            <div class="appointment-card__info-item">
+                <i class="icon icon--clock"></i>
+                <span>{{ appointment.appointment_date|time:"g:i A" }}</span>
+            </div>
+            <div class="appointment-card__info-item">
+                <i class="icon icon--email"></i>
+                <span>{{ appointment.email }}</span>
+            </div>
+            <div class="appointment-card__info-item">
+                <i class="icon icon--phone"></i>
+                <span>{{ appointment.phone }}</span>
+            </div>
+        </div>
+
+        <div class="appointment-card__design">
+            <h4 class="appointment-card__design-title">Tattoo Design</h4>
+            <p class="appointment-card__design-text">{{ appointment.tattoo_design|truncatewords:30 }}</p>
+
+            {% if appointment.reference_image %}
+                <img src="{{ appointment.reference_image.url }}"
+                     alt="Reference design"
+                     class="appointment-card__image">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="appointment-card__footer">
+        <div class="appointment-card__actions">
+            {% if user.is_staff %}
+                {% include 'atoms/button.html' with text='Approve' type='success' %}
+                {% include 'atoms/button.html' with text='Reject' type='danger' %}
+            {% endif %}
+            {% include 'atoms/button.html' with text='View Details' type='outline' %}
+        </div>
+
+        <small class="appointment-card__date">
+            Created: {{ appointment.created_at|date:"M d, Y" }}
+        </small>
+    </div>
+</article>
+
+<!--
+Features:
+- Status badge with color coding
+- Contact information display
+- Design description with truncation
+- Reference image display
+- Action buttons (staff-only)
+- Responsive layout
+-->

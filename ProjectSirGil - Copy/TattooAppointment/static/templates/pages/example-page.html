@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tattoo Appointment Booking - Professional tattoo studio">
+    <title>{% block title %}Tattoo Studio{% endblock %}</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+    <!-- Header/Navigation -->
+    <header class="site-header">
+        {% include 'organisms/navbar.html' %}
+    </header>
+
+    <!-- Main Content -->
+    <main class="site-main">
+        <!-- Hero Section (if needed) -->
+        {% block hero %}{% endblock %}
+
+        <!-- Messages/Alerts -->
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="alert alert--{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Page Content -->
+        <div class="container">
+            {% block content %}
+                <!-- Example: Using Atomic Components -->
+                <section class="section">
+                    <h1 class="section__title">Welcome to Our Tattoo Studio</h1>
+
+                    <!-- Search Bar -->
+                    {% include 'molecules/search-bar.html' with placeholder='Search for artists, styles...' %}
+
+                    <!-- Appointment Cards Grid -->
+                    <div class="appointments-grid">
+                        {% for appointment in appointments %}
+                            {% include 'organisms/appointment-card.html' with appointment=appointment %}
+                        {% empty %}
+                            <p class="empty-state">No appointments found.</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Example Form -->
+                    <div class="form-section">
+                        <h2>Book an Appointment</h2>
+                        <form method="POST" class="form">
+                            {% csrf_token %}
+
+                            {% include 'molecules/form-field.html' with
+                                label='Full Name'
+                                name='client_name'
+                                required=True
+                            %}
+
+                            {% include 'molecules/form-field.html' with
+                                label='Email'
+                                name='email'
+                                type='email'
+                                required=True
+                            %}
+
+                            {% include 'molecules/form-field.html' with
+                                label='Phone'
+                                name='phone'
+                                type='tel'
+                                required=True
+                            %}
+
+                            <div class="form-actions">
+                                {% include 'atoms/button.html' with text='Submit' type='primary' button_type='submit' %}
+                                {% include 'atoms/button.html' with text='Cancel' type='secondary' %}
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        {% block footer %}
+            <div class="container">
+                <p>&copy; 2024 Tattoo Studio. All rights reserved.</p>
+            </div>
+        {% endblock %}
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+<!--
+This example page demonstrates:
+1. Using atoms (buttons, inputs)
+2. Using molecules (form-fields, search-bar)
+3. Using organisms (navbar, appointment-card)
+4. Proper Django template structure
+5. Message handling
+6. Responsive layout
+7. Modular, reusable components
+-->
