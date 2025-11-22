@@ -1,0 +1,343 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments • J'ink Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0a0a0a;
+            color: #f6f6f6;
+        }
+
+        .dashboard {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.92), rgba(0,0,0,0.95)), url('https://images.unsplash.com/photo-1600180758890-6f055b59b7c3?w=1600') center/cover fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(0,0,0,0.9);
+            border-bottom: 2px solid #d4af37;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Rock Salt', cursive;
+            color: #d4af37;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        nav ul li a:hover {
+            color: #d4af37;
+        }
+
+        .content {
+            flex: 1;
+            padding: 60px clamp(20px, 5vw, 80px) 80px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-family: 'Rock Salt', cursive;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            color: #d4af37;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #bfbfbf;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            padding: 25px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(212,175,55,0.4);
+            border-radius: 16px;
+            backdrop-filter: blur(4px);
+        }
+
+        .stat-label {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: #a8a8a8;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 5px 0;
+        }
+
+        .stat-meta {
+            color: #d4af37;
+            font-size: 0.9rem;
+        }
+
+        .panels {
+            display: grid;
+            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        }
+
+        .panel {
+            padding: 30px;
+            background: rgba(15,15,15,0.85);
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .panel h2 {
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+
+        .appointment-card {
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .appointment-card:last-child {
+            border-bottom: none;
+        }
+
+        .appointment-date {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .appointment-client {
+            font-size: 1.1rem;
+            color: #fff;
+            margin: 5px 0;
+        }
+
+        .appointment-meta {
+            font-size: 0.9rem;
+            color: #bdbdbd;
+        }
+
+        .status-chip {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        .status-pending { background: rgba(255,193,7,0.15); color: #ffc107; border: 1px solid rgba(255,193,7,0.3); }
+        .status-approved { background: rgba(40,167,69,0.15); color: #28a745; border: 1px solid rgba(40,167,69,0.3); }
+        .status-rejected { background: rgba(220,53,69,0.15); color: #dc3545; border: 1px solid rgba(220,53,69,0.3); }
+
+        .empty-state {
+            color: #777;
+            font-style: italic;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .quick-actions {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .quick-actions a {
+            display: inline-block;
+            margin: 10px 15px;
+            padding: 14px 26px;
+            border: 2px solid #d4af37;
+            border-radius: 999px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: #d4af37;
+            text-decoration: none;
+        }
+
+        .quick-actions a:hover {
+            background: #d4af37;
+            color: #000;
+        }
+
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 25px;
+            text-align: center;
+            color: #777;
+            background: #000;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 12px;
+                padding: 15px 20px;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <nav>
+            <a class="logo" href="{% url 'appointments:landing' %}">J'INK STUDIO</a>
+            <ul>
+                <li><a href="{% url 'appointments:list-fbv' %}">FBV List</a></li>
+                <li><a href="{% url 'appointments:list-cbv' %}">CBV List</a></li>
+                <li><a href="{% url 'appointments:logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <div class="hero">
+                <h1>Welcome back, {{ user.first_name|default:user.username }}</h1>
+                <p>Your personal hub for keeping every ink session on track.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p class="stat-label">Total Sessions</p>
+                    <p class="stat-value">{{ stats.total }}</p>
+                    <p class="stat-meta">All time bookings{% if show_all %} (studio-wide){% endif %}</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Pending Designs</p>
+                    <p class="stat-value">{{ stats.pending }}</p>
+                    <p class="stat-meta">Awaiting approval</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Approved Ink</p>
+                    <p class="stat-value">{{ stats.approved }}</p>
+                    <p class="stat-meta">Green-lit sessions</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Next Session</p>
+                    {% if stats.next_session %}
+                    <p class="stat-value">{{ stats.next_session|date:"M d" }}</p>
+                    <p class="stat-meta">{{ stats.next_session|date:"g:i A" }}</p>
+                    {% else %}
+                    <p class="stat-value">—</p>
+                    <p class="stat-meta">No bookings queued</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="panels">
+                <div class="panel">
+                    <h2>Upcoming appointments</h2>
+                    {% if upcoming_appointments %}
+                        {% for appointment in upcoming_appointments %}
+                        <div class="appointment-card">
+                            <div class="appointment-date">{{ appointment.appointment_date|date:"M d, Y - g:i A" }}</div>
+                            <div class="appointment-client">{{ appointment.client_name }}</div>
+                            <div class="appointment-meta">{{ appointment.tattoo_design|truncatechars:80 }}</div>
+                            <span class="status-chip status-{{ appointment.status }}">{{ appointment.get_status_display }}</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">No upcoming sessions yet. Time to book one.</div>
+                    {% endif %}
+                </div>
+
+                <div class="panel">
+                    <h2>{% if show_all %}Studio activity{% else %}My requests{% endif %}</h2>
+                    {% if recent_activity %}
+                        {% for appointment in recent_activity %}
+                        <div class="appointment-card">
+                            <div class="appointment-client">{{ appointment.client_name }}</div>
+                            <div class="appointment-date">Booked {{ appointment.created_at|date:"M d, Y" }}</div>
+                            <span class="status-chip status-{{ appointment.status }}">{{ appointment.get_status_display }}</span>
+                            {% if not show_all and appointment.reference_image %}
+                            <div style="margin-top:10px;">
+                                <img src="{{ appointment.reference_image.url }}" alt="Reference" style="max-width:100%;border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">No recent bookings.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                {% if not show_all %}
+                <a href="{% url 'appointments:create' %}">Book Session</a>
+                {% else %}
+                <a href="{% url 'appointments:manage' %}">Admin Control</a>
+                {% endif %}
+                <a href="{% url 'appointments:list-fbv' %}">Manage (FBV)</a>
+                <a href="{% url 'appointments:list-cbv' %}">Manage (CBV)</a>
+                <a href="{% url 'appointments:landing' %}#enquiry">New Enquiry</a>
+            </div>
+        </div>
+
+        <footer>Ink Haven Studio • Crafting Legends Since 2025</footer>
+    </div>
+</body>
+</html>

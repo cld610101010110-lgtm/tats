@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment • J'ink Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #080808;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .page {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1504593811423-6dd665756598?w=1600') center/cover fixed;
+            display: flex;
+            flex-direction: column;
+        }
+        nav {
+            padding: 20px clamp(20px, 5vw, 80px);
+            border-bottom: 2px solid rgba(212,175,55,0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.85);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .logo {
+            font-family: 'Rock Salt', cursive;
+            color: #d4af37;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        nav a:hover { color: #d4af37; }
+        .content {
+            flex: 1;
+            padding: 50px clamp(20px, 6vw, 120px) 80px;
+            display: flex;
+            justify-content: center;
+        }
+        .form-card {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(8,8,8,0.8);
+            border: 1px solid rgba(212,175,55,0.5);
+            border-radius: 20px;
+            padding: clamp(25px, 4vw, 45px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+        }
+        .form-card h1 {
+            font-family: 'Rock Salt', cursive;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #c3c3c3;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group.full {
+            grid-column: 1/-1;
+        }
+        label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            color: #d4af37;
+        }
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid rgba(212,175,55,0.5);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 1rem;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212,175,55,0.3);
+        }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+        .messages { grid-column: 1/-1; }
+        .alert {
+            padding: 12px 15px;
+            border-left: 4px solid #d4af37;
+            border-radius: 8px;
+            background: rgba(212,175,55,0.15);
+            margin-bottom: 10px;
+        }
+        .errorlist {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            color: #ff8b8b;
+            font-size: 0.85rem;
+        }
+        .btn-submit {
+            grid-column: 1/-1;
+            padding: 16px;
+            border: none;
+            border-radius: 999px;
+            background: #d4af37;
+            color: #000;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .btn-submit:hover { transform: translateY(-2px); }
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #000;
+            color: #777;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <nav>
+            <a class="logo" href="{% url 'appointments:index' %}">J'INK CLIENT PORTAL</a>
+            <div>
+                <a href="{% url 'appointments:index' %}">Dashboard</a>
+                <a href="{% url 'appointments:logout' %}">Logout</a>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="form-card">
+                <h1>Request A Session</h1>
+                <p class="subtitle">Tell us your idea, drop a reference image, and pick a date. We'll confirm once approved.</p>
+
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="POST" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="{{ form.client_name.id_for_label }}">Full Name *</label>
+                        {{ form.client_name }}
+                        {{ form.client_name.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Email *</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.phone.id_for_label }}">Phone *</label>
+                        {{ form.phone }}
+                        {{ form.phone.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.appointment_date.id_for_label }}">Preferred Date & Time *</label>
+                        {{ form.appointment_date }}
+                        {{ form.appointment_date.errors }}
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="{{ form.tattoo_design.id_for_label }}">Tattoo Concept *</label>
+                        {{ form.tattoo_design }}
+                        {{ form.tattoo_design.errors }}
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="{{ form.reference_image.id_for_label }}">Reference Image (optional)</label>
+                        {{ form.reference_image }}
+                        {{ form.reference_image.errors }}
+                        <small style="color:#aaa;">PNG/JPG up to 5MB. Helps our artists visualize your piece.</small>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Submit Appointment</button>
+                </form>
+            </div>
+        </div>
+
+        <footer>Ink Haven Studio • Crafting Legends Since 2025</footer>
+    </div>
+</body>
+</html>
+

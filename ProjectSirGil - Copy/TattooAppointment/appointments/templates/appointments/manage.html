@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel • J'ink Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #050505;
+            color: #f7f7f7;
+        }
+        .admin {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.93), rgba(0,0,0,0.95)), url('https://images.unsplash.com/photo-1470246973918-29a93221c455?w=1600') center/cover fixed;
+            display: flex;
+            flex-direction: column;
+        }
+        nav {
+            padding: 20px clamp(20px, 5vw, 80px);
+            border-bottom: 2px solid rgba(212,175,55,0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.85);
+            position: sticky;
+            top: 0;
+            z-index: 60;
+        }
+        .logo {
+            font-family: 'Rock Salt', cursive;
+            color: #d4af37;
+            letter-spacing: 2px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        nav a:hover { color: #d4af37; }
+
+        .content {
+            flex: 1;
+            padding: 50px clamp(20px, 5vw, 120px) 80px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .hero h1 {
+            font-family: 'Rock Salt', cursive;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+        .hero p { color: #bdbdbd; letter-spacing: 1px; }
+
+        .table {
+            display: grid;
+            gap: 25px;
+        }
+        .card {
+            background: rgba(7,7,7,0.85);
+            border: 1px solid rgba(212,175,55,0.4);
+            border-radius: 18px;
+            padding: clamp(20px, 3vw, 35px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        .card-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .client {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .status-chip {
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .status-pending { background: rgba(255,193,7,0.15); color: #ffc107; border: 1px solid rgba(255,193,7,0.4); }
+        .status-approved { background: rgba(40,167,69,0.15); color: #28a745; border: 1px solid rgba(40,167,69,0.4); }
+        .status-rejected { background: rgba(220,53,69,0.15); color: #dc3545; border: 1px solid rgba(220,53,69,0.4); }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .detail {
+            background: rgba(255,255,255,0.02);
+            padding: 12px 14px;
+            border-radius: 8px;
+            border-left: 3px solid rgba(212,175,55,0.5);
+        }
+        .detail span {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9f9f9f;
+            margin-bottom: 6px;
+        }
+
+        .design-preview {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.3);
+        }
+        .design-preview img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .actions form {
+            display: inline;
+        }
+        .btn {
+            padding: 12px 18px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-approve { background: #28a745; color: #fff; }
+        .btn-decline { background: #dc3545; color: #fff; }
+        .btn-pending { background: #ffc107; color: #000; }
+
+        .empty {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            padding: 40px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #000;
+            color: #777;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin">
+        <nav>
+            <div class="logo">J'INK ADMIN</div>
+            <div>
+                <a href="{% url 'appointments:manage' %}">Dashboard</a>
+                <a href="{% url 'appointments:list-fbv' %}">Legacy View</a>
+                <a href="{% url 'appointments:logout' %}">Logout</a>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="hero">
+                <h1>Appointment Control Room</h1>
+                <p>Approve, decline, or put sessions on hold with a single click.</p>
+            </div>
+
+            {% if messages %}
+            <div class="messages" style="margin-bottom:20px;">
+                {% for message in messages %}
+                <div class="alert" style="padding:12px 15px;border-left:4px solid #d4af37;background:rgba(212,175,55,0.15);border-radius:8px;margin-bottom:10px;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if appointments %}
+            <div class="table">
+                {% for appointment in appointments %}
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="client">{{ appointment.client_name }}</div>
+                            <small>{{ appointment.email }} • {{ appointment.phone }}</small>
+                        </div>
+                        <span class="status-chip status-{{ appointment.status }}">{{ appointment.get_status_display }}</span>
+                    </div>
+
+                    <div class="details">
+                        <div class="detail">
+                            <span>Requested</span>
+                            {{ appointment.created_at|date:"M d, Y - g:i A" }}
+                        </div>
+                        <div class="detail">
+                            <span>Preferred Session</span>
+                            {{ appointment.appointment_date|date:"M d, Y - g:i A" }}
+                        </div>
+                        <div class="detail">
+                            <span>Assigned User</span>
+                            {{ appointment.user.username|default:"—" }}
+                        </div>
+                    </div>
+
+                    <div class="design-preview">
+                        <strong>Concept:</strong>
+                        <p style="margin-top:8px;color:#ccc;">{{ appointment.tattoo_design }}</p>
+                        {% if appointment.reference_image %}
+                        <img src="{{ appointment.reference_image.url }}" alt="Tattoo reference">
+                        {% endif %}
+                    </div>
+
+                    <div class="actions">
+                        <form method="POST" action="{% url 'appointments:update-status' appointment.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="pending">
+                            <button type="submit" class="btn btn-pending">Mark Pending</button>
+                        </form>
+                        <form method="POST" action="{% url 'appointments:update-status' appointment.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="approved">
+                            <button type="submit" class="btn btn-approve">Approve</button>
+                        </form>
+                        <form method="POST" action="{% url 'appointments:update-status' appointment.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="rejected">
+                            <button type="submit" class="btn btn-decline">Decline</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty">No appointment requests yet.</div>
+            {% endif %}
+        </div>
+
+        <footer>Ink Haven Studio • Admin Ops</footer>
+    </div>
+</body>
+</html>
+
