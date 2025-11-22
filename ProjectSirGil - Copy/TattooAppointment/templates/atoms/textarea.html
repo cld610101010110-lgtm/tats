@@ -1,0 +1,17 @@
+{# Atom: Textarea Field #}
+{# Usage: {% include 'atoms/textarea.html' with name='message' placeholder='Your message' %} #}
+
+<textarea name="{{ name }}"
+          id="{{ id|default:name }}"
+          class="textarea {{ class }}"
+          {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+          {% if required %}required{% endif %}
+          {% if disabled %}disabled{% endif %}
+          {% if rows %}rows="{{ rows }}"{% endif %}
+          {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+>{% if value %}{{ value }}{% endif %}</textarea>
+
+{#
+Example Usage:
+{% include 'atoms/textarea.html' with name='description' placeholder='Describe your tattoo idea' rows=4 required=True %}
+#}

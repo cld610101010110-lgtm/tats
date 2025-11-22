@@ -1,0 +1,20 @@
+{# Atom: Badge Component #}
+{# Usage: {% include 'atoms/badge.html' with text='Approved' type='success' %} #}
+
+<span class="badge badge--{{ type|default:'default' }} {{ class }}">
+    {% if icon %}{{ icon }} {% endif %}{{ text }}
+</span>
+
+{#
+Available types:
+- success: Green badge (approved, success)
+- danger: Red badge (rejected, error)
+- warning: Orange badge (pending, warning)
+- info: Blue badge (information)
+- default: Gray badge
+
+Example Usage:
+{% include 'atoms/badge.html' with text='Approved' type='success' icon='✅' %}
+{% include 'atoms/badge.html' with text='Pending' type='warning' icon='⏳' %}
+{% include 'atoms/badge.html' with text='Rejected' type='danger' icon='❌' %}
+#}

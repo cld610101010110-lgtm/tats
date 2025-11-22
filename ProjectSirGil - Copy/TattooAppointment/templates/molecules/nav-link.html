@@ -1,0 +1,15 @@
+{# Molecule: Navigation Link Component #}
+{# Usage: {% include 'molecules/nav-link.html' with text='Home' url='/' active=True %} #}
+
+<li class="nav__item">
+    <a href="{{ url }}"
+       class="nav__link {% if active %}nav__link--active{% endif %} {{ class }}">
+        {% if icon %}{{ icon }} {% endif %}{{ text }}
+    </a>
+</li>
+
+{#
+Example Usage:
+{% include 'molecules/nav-link.html' with text='Dashboard' url='/dashboard/' active=True %}
+{% include 'molecules/nav-link.html' with text='Logout' url='/logout/' icon='🚪' %}
+#}

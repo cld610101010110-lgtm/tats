@@ -1,0 +1,36 @@
+{# Organism: Navigation Bar #}
+{# Usage: {% include 'organisms/navbar.html' %} #}
+
+<nav class="navbar">
+    <a href="{% url 'appointments:landing' %}" class="navbar__logo">
+        J'INK STUDIO
+    </a>
+
+    <ul class="navbar__menu">
+        {% if user.is_authenticated %}
+            {% include 'molecules/nav-link.html' with text='Dashboard' url=dashboard_url|default:'/appointments/' active=request.path|slice:':14'=='/appointments/' %}
+
+            {% if user.is_staff %}
+                {% include 'molecules/nav-link.html' with text='Manage' url=manage_url|default:'/appointments/manage/' %}
+            {% endif %}
+
+            <li class="nav__item nav__item--user">
+                <span class="nav__link">👤 {{ user.username }}</span>
+            </li>
+
+            {% include 'molecules/nav-link.html' with text='Logout' url=logout_url|default:'/appointments/logout/' icon='🚪' %}
+        {% else %}
+            {% include 'molecules/nav-link.html' with text='Home' url=landing_url|default:'/' %}
+            {% include 'molecules/nav-link.html' with text='Login' url=login_url|default:'/appointments/login/' %}
+            {% include 'molecules/nav-link.html' with text='Sign Up' url=register_url|default:'/appointments/register/' %}
+        {% endif %}
+    </ul>
+</nav>
+
+{#
+Features:
+- Responsive navigation
+- User authentication states
+- Active page highlighting
+- Staff-only links
+#}

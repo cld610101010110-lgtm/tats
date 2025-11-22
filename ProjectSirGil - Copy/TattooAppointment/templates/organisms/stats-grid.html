@@ -1,0 +1,57 @@
+{# Organism: Statistics Grid #}
+{# Usage: {% include 'organisms/stats-grid.html' with stats=stats %} #}
+
+<div class="stats-grid {{ class }}">
+    {% include 'molecules/stat-card.html' with
+        icon='📅'
+        label='Total Appointments'
+        value=stats.total
+    %}
+
+    {% include 'molecules/stat-card.html' with
+        icon='⏳'
+        label='Pending Review'
+        value=stats.pending
+        class='stat-card--warning'
+    %}
+
+    {% include 'molecules/stat-card.html' with
+        icon='✅'
+        label='Approved'
+        value=stats.approved
+        class='stat-card--success'
+    %}
+
+    {% include 'molecules/stat-card.html' with
+        icon='❌'
+        label='Rejected'
+        value=stats.rejected
+        class='stat-card--danger'
+    %}
+
+    {% if stats.next_session %}
+        <div class="stat-card stat-card--highlight">
+            <div class="stat-card__icon">🔜</div>
+            <div class="stat-card__content">
+                <div class="stat-card__label">Next Session</div>
+                <div class="stat-card__value stat-card__value--small">
+                    {{ stats.next_session|date:"M d, Y" }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{#
+Example Usage:
+{% include 'organisms/stats-grid.html' with stats=stats %}
+
+Expected stats structure:
+stats = {
+    'total': 10,
+    'pending': 3,
+    'approved': 5,
+    'rejected': 2,
+    'next_session': datetime_object
+}
+#}

@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}J'ink Studio - Tattoo Appointments{% endblock %}</title>
+
+    {# Google Fonts #}
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+
+    {# Base Styles #}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+    {# Navigation Bar #}
+    <header>
+        {% include 'organisms/navbar.html' %}
+    </header>
+
+    {# Django Messages #}
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert--{{ message.tags|default:'info' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Main Content #}
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    {# Footer #}
+    <footer class="footer">
+        {% block footer %}
+            <div class="footer__content">
+                <p>&copy; 2025 J'ink Studio. All Rights Reserved.</p>
+                <p>Crafting Legends Since 2025</p>
+            </div>
+        {% endblock %}
+    </footer>
+
+    {# JavaScript #}
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

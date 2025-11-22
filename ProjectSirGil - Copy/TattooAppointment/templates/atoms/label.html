@@ -1,0 +1,12 @@
+{# Atom: Label Component #}
+{# Usage: {% include 'atoms/label.html' with text='Email Address' for='email' required=True %} #}
+
+<label for="{{ for }}" class="label {{ class }}">
+    {{ text }}
+    {% if required %}<span class="label__required">*</span>{% endif %}
+</label>
+
+{#
+Example Usage:
+{% include 'atoms/label.html' with text='Email Address' for='email' required=True %}
+#}

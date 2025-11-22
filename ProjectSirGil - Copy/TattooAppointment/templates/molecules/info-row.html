@@ -1,0 +1,20 @@
+{# Molecule: Info Row Component #}
+{# Displays information with icon and label #}
+{# Usage: {% include 'molecules/info-row.html' with icon='📧' label='Email' value=appointment.email %} #}
+
+<div class="info-row {{ class }}">
+    {% if icon %}
+        <span class="info-row__icon">{{ icon }}</span>
+    {% endif %}
+    {% if label %}
+        <span class="info-row__label">{{ label }}:</span>
+    {% endif %}
+    <span class="info-row__value">{{ value }}</span>
+</div>
+
+{#
+Example Usage:
+{% include 'molecules/info-row.html' with icon='📧' label='Email' value=appointment.email %}
+{% include 'molecules/info-row.html' with icon='📱' label='Phone' value=appointment.phone %}
+{% include 'molecules/info-row.html' with icon='📅' label='Date' value=appointment.appointment_date|date:"M d, Y" %}
+#}

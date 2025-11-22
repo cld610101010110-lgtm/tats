@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Appointments - J'ink Studio{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Page-specific styles */
+    .main-content {
+        min-height: 100vh;
+        background: linear-gradient(rgba(0,0,0,0.92), rgba(0,0,0,0.95)),
+                    url('https://images.unsplash.com/photo-1600180758890-6f055b59b7c3?w=1600') center/cover fixed;
+        padding: 60px clamp(20px, 5vw, 80px) 80px;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .page-header__title {
+        font-family: 'Rock Salt', cursive;
+        font-size: clamp(2.2rem, 4vw, 3.2rem);
+        color: #d4af37;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .page-header__subtitle {
+        color: #bfbfbf;
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    .appointments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+        margin-top: 40px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+        font-size: 1.3em;
+    }
+
+    .empty-state::before {
+        content: "💀";
+        display: block;
+        font-size: 4em;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {# Page Header #}
+    <div class="page-header">
+        <h1 class="page-header__title">My Appointments</h1>
+        <p class="page-header__subtitle">Manage your tattoo sessions</p>
+    </div>
+
+    {# Statistics Grid #}
+    {% if stats %}
+        {% include 'organisms/stats-grid.html' with stats=stats %}
+    {% endif %}
+
+    {# Appointments Grid #}
+    {% if appointments %}
+        <div class="appointments-grid">
+            {% for appointment in appointments %}
+                {% include 'organisms/appointment-card.html' with
+                    appointment=appointment
+                    show_actions=user.is_staff
+                    edit_url=appointment.pk|stringformat:"d"|add:"/edit/"
+                    delete_url=appointment.pk|stringformat:"d"|add:"/delete/"
+                %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            No appointments scheduled yet. Time to get inked!
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
