@@ -247,8 +247,12 @@
         <nav>
             <a class="logo" href="{% url 'appointments:landing' %}">J'INK STUDIO</a>
             <ul>
-                <li><a href="{% url 'appointments:list-fbv' %}">FBV List</a></li>
-                <li><a href="{% url 'appointments:list-cbv' %}">CBV List</a></li>
+                <li><a href="{% url 'appointments:index' %}">Dashboard</a></li>
+                <li><a href="{% url 'appointments:landing' %}#styles">Styles</a></li>
+                <li><a href="{% url 'appointments:landing' %}#artists">Artists</a></li>
+                {% if user.is_staff %}
+                <li><a href="{% url 'appointments:manage' %}">Manage</a></li>
+                {% endif %}
                 <li><a href="{% url 'appointments:logout' %}">Logout</a></li>
             </ul>
         </nav>
