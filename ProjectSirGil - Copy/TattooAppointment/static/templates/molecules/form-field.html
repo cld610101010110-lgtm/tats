@@ -1,0 +1,36 @@
+<!-- Molecule: Form Field Component -->
+<!-- Combines label, input, and error message -->
+<!-- Usage: {% include 'molecules/form-field.html' with label='Email' name='email' type='email' %} -->
+
+<div class="form-field {{ class }}">
+    {% if label %}
+        <label for="{{ id|default:name }}" class="form-field__label">
+            {{ label }}
+            {% if required %}<span class="form-field__required">*</span>{% endif %}
+        </label>
+    {% endif %}
+
+    <div class="form-field__input-wrapper">
+        {% include 'atoms/input.html' with name=name type=type placeholder=placeholder value=value required=required disabled=disabled %}
+    </div>
+
+    {% if error %}
+        <span class="form-field__error">{{ error }}</span>
+    {% endif %}
+
+    {% if help_text %}
+        <small class="form-field__help">{{ help_text }}</small>
+    {% endif %}
+</div>
+
+<!--
+Example Usage:
+{% include 'molecules/form-field.html' with
+    label='Email Address'
+    name='email'
+    type='email'
+    placeholder='you@example.com'
+    required=True
+    help_text='We will never share your email'
+%}
+-->

@@ -1,0 +1,28 @@
+<!-- Molecule: Search Bar Component -->
+<!-- Combines search input with search button -->
+<!-- Usage: {% include 'molecules/search-bar.html' with placeholder='Search appointments...' %} -->
+
+<form class="search-bar {{ class }}" method="GET" action="{{ action|default:'' }}">
+    <div class="search-bar__wrapper">
+        <input
+            type="search"
+            name="{{ name|default:'q' }}"
+            class="search-bar__input"
+            placeholder="{{ placeholder|default:'Search...' }}"
+            value="{{ query }}"
+            aria-label="Search"
+        />
+        <button type="submit" class="search-bar__button" aria-label="Submit search">
+            <i class="icon icon--search"></i>
+        </button>
+    </div>
+</form>
+
+<!--
+Example Usage:
+{% include 'molecules/search-bar.html' with
+    placeholder='Search appointments...'
+    action='/appointments/search/'
+    query=request.GET.q
+%}
+-->
