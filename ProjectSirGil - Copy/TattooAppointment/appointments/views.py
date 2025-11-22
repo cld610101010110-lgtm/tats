@@ -32,8 +32,9 @@ def landing_page(request):
     return render(request, 'appointments/landing.html', context)
 
 
+@login_required(login_url='appointments:login')
 def enquiry_submit(request):
-    """Handle tattoo enquiry form submission"""
+    """Handle tattoo enquiry form submission - LOGIN REQUIRED"""
     if request.method == 'POST':
         form = EnquiryForm(request.POST)
         if form.is_valid():

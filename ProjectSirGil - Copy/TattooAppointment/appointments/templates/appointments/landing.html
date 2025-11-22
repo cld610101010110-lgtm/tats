@@ -560,11 +560,17 @@
     <nav>
         <a href="{% url 'appointments:landing' %}" class="logo"> J'INK STUDIO </a>
         <ul>
-            <li><a href="#dashboard">Dashboard</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'appointments:index' %}">Dashboard</a></li>
+            {% endif %}
             <li><a href="#styles">Styles</a></li>
             <li><a href="#story">Our Story</a></li>
             <li><a href="#artists">Artists</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'appointments:logout' %}">Logout</a></li>
+            {% else %}
             <li><a href="{% url 'appointments:login' %}">Login</a></li>
+            {% endif %}
         </ul>
     </nav>
 
@@ -730,6 +736,7 @@
             <h2>TATTOO ENQUIRY</h2>
             <p>Interested in getting a tattoo? A tattoo is a lifetime commitment. Let us know your ideas so we can book a time for you!</p>
 
+            {% if user.is_authenticated %}
             <form method="POST" action="{% url 'appointments:enquiry_submit' %}">
                 {% csrf_token %}
                 <div class="form-group">
@@ -757,8 +764,21 @@
                     <input type="date" id="preferred_date" name="preferred_date">
                 </div>
 
-                <button type="submit" class="submit-btn">TATTOO ENQUIRY</button>
+                <button type="submit" class="submit-btn">SUBMIT ENQUIRY</button>
             </form>
+            {% else %}
+            <div style="padding: 40px; text-align: center;">
+                <p style="font-size: 1.2rem; margin-bottom: 30px; color: #ccc;">
+                    🔒 Please log in to submit a tattoo enquiry
+                </p>
+                <a href="{% url 'appointments:login' %}?next={{ request.path }}%23enquiry" class="submit-btn" style="display: inline-block; text-decoration: none;">
+                    LOGIN TO CONTINUE
+                </a>
+                <p style="margin-top: 20px; font-size: 0.95rem; color: #999;">
+                    Don't have an account? <a href="{% url 'appointments:register' %}" style="color: #d4af37; text-decoration: underline;">Sign up here</a>
+                </p>
+            </div>
+            {% endif %}
         </div>
     </section>
 
